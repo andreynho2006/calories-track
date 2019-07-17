@@ -88,6 +88,9 @@ const ItemCtrl = (function(){
             //remove item
             data.items.splice(index, 1);
         },
+        clearAllItems: function() {
+            data.items = [];
+        },
         getCurrentItem: function() {
             return data.currentItem;
 
@@ -128,6 +131,7 @@ const UICtrl = (function(){
         updateBtn: '.update-btn',
         deleteBtn: '.delete-btn',
         backBtn: '.back-btn',
+        clearBtn: '.clear-btn',
         itemNameInput: '#item-name',
         itemCaloriesInput: '#item-calories',
         totalCalories: '.total-calories',
@@ -200,6 +204,15 @@ const UICtrl = (function(){
             const item = document.querySelector(itemID);
             item.remove();
         },
+        removeItems: function() {
+            let listItems = document.querySelectorAll(UISelectors.listItems);
+
+            // turn Node list into array
+            listItems = Array.from(listItems);
+            listItems.forEach(function(item) {
+                item.remove();
+            });
+        },
         clearInput: function() {
             document.querySelector(UISelectors.itemNameInput).value = '';
             document.querySelector(UISelectors.itemCaloriesInput).value = '';
@@ -267,6 +280,9 @@ const App = (function(ItemCtrl, UICtrl){
 
         // back btn event
         document.querySelector(UISelectors.backBtn).addEventListener('click', UICtrl.clearEditState);
+
+        // clear items event
+        document.querySelector(UISelectors.clearBtn).addEventListener('click', clearAllItemsClick);
     }
 
 
@@ -359,6 +375,24 @@ const App = (function(ItemCtrl, UICtrl){
         UICtrl.clearEditState();
 
         e.preventDefault();
+    }
+
+    // clear items event
+    const clearAllItemsClick = function() {
+        // delete all items from data structure
+        ItemCtrl.clearAllItems();
+
+        //get total calories
+        const totalCalories = ItemCtrl.getTotalCalories();
+
+        // add totalCalories to UI
+        UICtrl.showTotalCalories(totalCalories);
+
+        // remove from UI;
+        UICtrl.removeItems();
+
+        // hide <ul>
+        UICtrl.hideList();
     }
 
     // return from module
