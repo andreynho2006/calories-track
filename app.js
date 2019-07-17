@@ -59,6 +59,9 @@ const ItemCtrl = (function(){
             });
             return found;
         },
+        getCurrentItem: function() {
+            return data.currentItem;
+        },
         setCurrentItem: function(item) {
             data.currentItem = item;
         },
@@ -148,6 +151,11 @@ const UICtrl = (function(){
             document.querySelector(UISelectors.itemNameInput).value = '';
             document.querySelector(UISelectors.itemCaloriesInput).value = '';
         },
+        addItemToForm: function() {
+            document.querySelector(UISelectors.itemNameInput).value = ItemCtrl.getCurrentItem().name;
+            document.querySelector(UISelectors.itemCaloriesInput).value = ItemCtrl.getCurrentItem().calories;
+            UICtrl.showEditState();
+        },
         hideList: function() {
             document.querySelector(UISelectors.itemList).style.display = 'none';
         },
@@ -160,6 +168,13 @@ const UICtrl = (function(){
             document.querySelector(UISelectors.deleteBtn).style.display = 'none';
             document.querySelector(UISelectors.backBtn).style.display = 'none';
             document.querySelector(UISelectors.addBtn).style.display = 'inline';
+        },
+        showEditState: function() {
+            UICtrl.clearInput();
+            document.querySelector(UISelectors.updateBtn).style.display = 'inline';
+            document.querySelector(UISelectors.deleteBtn).style.display = 'inline';
+            document.querySelector(UISelectors.backBtn).style.display = 'inline';
+            document.querySelector(UISelectors.addBtn).style.display = 'none';
         },
         // get selectors to use in App
         getSelectors: function() {
@@ -219,7 +234,6 @@ const App = (function(ItemCtrl, UICtrl){
 
             //break into an array
             const listIdArray = listId.split('-');
-            console.log(listIdArray);
 
             //get the actual ID
             const id = parseInt(listIdArray[1]);
@@ -229,6 +243,9 @@ const App = (function(ItemCtrl, UICtrl){
 
             // set current item
             ItemCtrl.setCurrentItem(itemToEdit);
+
+            // add item to form
+            UICtrl.addItemToForm();
         }
 
         e.preventDefault();
