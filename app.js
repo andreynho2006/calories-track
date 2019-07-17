@@ -11,7 +11,7 @@ const ItemCtrl = (function(){
     }
 
     // data strcture
-    // private data
+    // private data: STATE
     const data = {
         items: [
             {id: 0, name: 'Steak Dinner', calories: 1200},
@@ -22,9 +22,13 @@ const ItemCtrl = (function(){
         totalCalories: 0
     }
 
+
     // return from controller
     // public methods
     return {
+        getItens: function() {
+            return data.items;
+        },
         logData: function() {
             return data;
         }
@@ -39,7 +43,22 @@ const UICtrl = (function(){
 
     // public methods
     return {
+        // public methods
+        populateItemList: function(items) {
+            let html = '';
 
+            items.forEach(function(item) {
+                html += `<li class="collection-item" id="item-${item.id}">
+                            <strong>${item.name}: </strong> <em>${item.calories} Calories</em>
+                            <a href="#" class="secondary-content">
+                            <i class="edit-item fa fa-pencil"></i>
+                            </a>
+                        </li>`;
+            });
+
+            // insert list items
+            document.querySelector('#item-list').innerHTML = html;
+        }
     }
 })();
 
@@ -54,7 +73,11 @@ const App = (function(ItemCtrl, UICtrl){
     // public methods
     return {
         init: function() {
-            console.log('Initializing app.....');
+            // fetch items from data strcture
+            const items = ItemCtrl.getItens();
+
+            // populate list with items
+            UICtrl.populateItemList(items);
         }
     }
 
