@@ -76,6 +76,18 @@ const ItemCtrl = (function(){
             return found;
 
         },
+        deleteItem(id) {
+            //get ids
+            const ids = data.items.map(function(item) {
+                return item.id;
+            });
+
+            // GET INDEX
+            const index = ids.indexOf(id);
+
+            //remove item
+            data.items.splice(index, 1);
+        },
         getCurrentItem: function() {
             return data.currentItem;
 
@@ -183,6 +195,11 @@ const UICtrl = (function(){
                 }
             });
         },
+        deleteListItem: function(id) {
+            const itemID = `#item-${id}`;
+            const item = document.querySelector(itemID);
+            item.remove();
+        },
         clearInput: function() {
             document.querySelector(UISelectors.itemNameInput).value = '';
             document.querySelector(UISelectors.itemCaloriesInput).value = '';
@@ -244,6 +261,12 @@ const App = (function(ItemCtrl, UICtrl){
 
         // update item event
         document.querySelector(UISelectors.updateBtn).addEventListener('click', itemUpdateSubmit);
+
+        // delete item event
+        document.querySelector(UISelectors.deleteBtn).addEventListener('click', itemDeleteSubmit);
+
+        // back btn event
+        document.querySelector(UISelectors.backBtn).addEventListener('click', UICtrl.clearEditState);
     }
 
 
@@ -314,6 +337,28 @@ const App = (function(ItemCtrl, UICtrl){
         UICtrl.clearEditState();
 
         e.preventDefault()
+    }
+
+    // Delete button event
+    const itemDeleteSubmit = function(e) {
+        // get id from current item
+        const currentItem = ItemCtrl.getCurrentItem();
+
+        // Delete from data structure
+        ItemCtrl.deleteItem(currentItem.id);
+
+        // delete from UI
+        UICtrl.deleteListItem(currentItem.id);
+
+        //get total calories
+        const totalCalories = ItemCtrl.getTotalCalories();
+
+        // add totalCalories to UI
+        UICtrl.showTotalCalories(totalCalories);
+
+        UICtrl.clearEditState();
+
+        e.preventDefault();
     }
 
     // return from module
