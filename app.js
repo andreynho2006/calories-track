@@ -196,7 +196,7 @@ const App = (function(ItemCtrl, UICtrl){
         // add item event
         document.querySelector(UISelectors.addBtn).addEventListener('click', itemAddSubmit);
 
-        document.querySelector(UISelectors.itemList).addEventListener('click', itemUpdateSubmit);
+        document.querySelector(UISelectors.itemList).addEventListener('click', itemEditClick);
     }
 
 
@@ -227,7 +227,7 @@ const App = (function(ItemCtrl, UICtrl){
     }
 
     // update item ssubmit
-    const itemUpdateSubmit = function(e) {
+    const itemEditClick = function(e) {
         if(e.target.classList.contains('edit-item')) {
             // get list item id (item-0, item-1)
             const listId = e.target.parentNode.parentNode.id;
