@@ -49,6 +49,20 @@ const ItemCtrl = (function(){
 
             return newItem;
         },
+        getTotalCalories: function() {
+            let total = 0;
+
+            // loo through items and get calories
+            data.items.forEach(function(item) {
+                total += item.calories;
+            })
+
+            // set totalcalories
+            data.totalCalories = total;
+
+            // return total
+            return data.totalCalories;
+        },
         logData: function() {
             return data;
         }
@@ -65,7 +79,8 @@ const UICtrl = (function(){
         itemList: '#item-list',
         addBtn: '.add-btn',
         itemNameInput: '#item-name',
-        itemCaloriesInput: '#item-calories'
+        itemCaloriesInput: '#item-calories',
+        totalCalories: '.total-calories',
     }
 
     // public methods
@@ -120,6 +135,9 @@ const UICtrl = (function(){
         hideList: function() {
             document.querySelector(UISelectors.itemList).style.display = 'none';
         },
+        showTotalCalories(totalCalories) {
+            document.querySelector(UISelectors.totalCalories).textContent = totalCalories;
+        },
         // get selectors to use in App
         getSelectors: function() {
             return UISelectors;
@@ -154,6 +172,12 @@ const App = (function(ItemCtrl, UICtrl){
             // add item to UI list
             UICtrl.addListItem(newItem);
 
+            //get total calories
+            const totalCalories = ItemCtrl.getTotalCalories();
+
+            // add totalCalories to UI
+            UICtrl.showTotalCalories(totalCalories);
+
             // clear input fields
             UICtrl.clearInput();
         }
@@ -175,6 +199,12 @@ const App = (function(ItemCtrl, UICtrl){
                 // populate list with items
                 UICtrl.populateItemList(items);
             }
+
+            //get total calories
+            const totalCalories = ItemCtrl.getTotalCalories();
+
+            // add totalCalories to UI
+            UICtrl.showTotalCalories(totalCalories);
 
             //load event listeners
             loadEventListeners();
