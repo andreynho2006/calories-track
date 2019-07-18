@@ -4,8 +4,7 @@ const StorageCtrl = (function() {
     // public methods
     return  {
         storeItem: function(item) {
-            let items = [];
-
+            let items;
             // check it there are any items in localStorage
             if(localStorage.getItem('items') === null) {
                 items = [];
@@ -15,13 +14,20 @@ const StorageCtrl = (function() {
                 localStorage.setItem('items', JSON.stringify(items));
             } else {
                 items = JSON.parse(localStorage.getItem('items'));
-
                 // push new item
                 items.push(item);
-
                 // re set localStorage
                 localStorage.setItem('items', JSON.stringify(items));
             }
+        },
+        getItemsFromStorage: function() {
+            let items;
+            if(localStorage.getItem('items') === null) {
+                items = [];
+            } else {
+                items = JSON.parse(localStorage.getItem('items'));
+            }
+            return items;
         }
     }
 })();
@@ -38,11 +44,12 @@ const ItemCtrl = (function(){
     // data strcture
     // private data: STATE
     const data = {
-        items: [
-            // {id: 0, name: 'Steak Dinner', calories: 1200},
-            // {id: 1, name: 'Cookie', calories: 400},
-            // {id: 2, name: 'Eggs', calories: 300}
-        ],
+        // items: [
+        //     // {id: 0, name: 'Steak Dinner', calories: 1200},
+        //     // {id: 1, name: 'Cookie', calories: 400},
+        //     // {id: 2, name: 'Eggs', calories: 300}
+        // ],
+        items: StorageCtrl.getItemsFromStorage(),
         currentItem: null,
         totalCalories: 0
     }
